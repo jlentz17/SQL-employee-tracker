@@ -17,8 +17,12 @@ app.use((req, res) => {
   res.status(404).end();
 });
 
+
 // Start server after DB connection
 db.connect((err) => {
+    db.query(`SELECT * FROM departments`, (err, rows) => {
+        console.log(rows)
+    })
     if (err) {
         console.log(err)
     };
