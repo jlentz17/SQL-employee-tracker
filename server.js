@@ -8,7 +8,6 @@ const mysql = require("mysql2");
 // const inquirer = require("inquirer");
 
 const inputCheck = require("./utils/inputCheck");
-
 // // middleware
 // app.use(express.urlencoded({ extended: false }));
 // app.use(express.json());
