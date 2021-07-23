@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/jlentz17/SQL-employee-tracker#readme",
   "dependencies": {
+    "console.table": "^0.10.0",
     "express": "^4.17.1",
     "mysql2": "^2.2.5"
   },

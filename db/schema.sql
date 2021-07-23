@@ -1,3 +1,5 @@
+USE employee;
+
 DROP TABLE IF EXISTS department;
 DROP TABLE IF EXISTS role;
 DROP TABLE IF EXISTS employee;
@@ -11,17 +13,17 @@ CREATE TABLE role(
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(30) NOT NULL,
     salary DECIMAL(10,2) NOT NULL,
-    department_id INTEGER
-    -- CONSTRAINT fk_department FOREIGN KEY (department_id)
-    -- REFERENCES department(id) on DELETE SET NULL
+    department_id INTEGER,
+    FOREIGN KEY (department_id)
+    REFERENCES department(id)
 );
 
 CREATE TABLE employee(
 id INTEGER AUTO_INCREMENT PRIMARY KEY,
 first_name VARCHAR(30),
 last_name VARCHAR(30),
-role_id INTEGER,
+role_id INTEGER NOT NULL,
+FOREIGN KEY (role_id) REFERENCES role(id),
 manager_id INTEGER,
-CONSTRAINT fk_role FOREIGN KEY (role_id),
-REFERENCES role(id) ON DELETE SET NULL
-)
+FOREIGN KEY (manager_id) REFERENCES employee(id)
+);
