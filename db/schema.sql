@@ -30,3 +30,7 @@ FOREIGN KEY (role_id) REFERENCES role(id),
 manager_id INTEGER,
 FOREIGN KEY (manager_id) REFERENCES employee(id)
 );
+
+SELECT employee.first_name, employee.last_name, role.title, role.salary, department.department_name, manager.first_name AS manager_first_name, manager.last_name AS manager_lastname FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON employee.manager_id = manager.id;
+
+SELECT role.title, role.salary, department.department_name FROM role LEFT JOIN department ON role.department_id = department.id
