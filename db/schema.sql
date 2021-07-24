@@ -17,20 +17,18 @@ CREATE TABLE role(
     title VARCHAR(30) NOT NULL,
     salary DECIMAL(10,2) NOT NULL,
     department_id INTEGER,
-    FOREIGN KEY (department_id)
-    REFERENCES department(id)
+    CONSTRAINT fk_department FOREIGN KEY (department_id)
+    REFERENCES department(id) ON DELETE CASCADE
 );
 
 CREATE TABLE employee(
 id INTEGER AUTO_INCREMENT PRIMARY KEY,
-first_name VARCHAR(30),
-last_name VARCHAR(30),
+first_name VARCHAR(30) NOT NULL,
+last_name VARCHAR(30) NOT NULL,
 role_id INTEGER NOT NULL,
-FOREIGN KEY (role_id) REFERENCES role(id),
+CONSTRAINT fk_role FOREIGN KEY (role_id)
+REFERENCES role(id) ON DELETE CASCADE,
 manager_id INTEGER,
-FOREIGN KEY (manager_id) REFERENCES employee(id)
+CONSTRAINT fk_manager FOREIGN KEY (manager_id) REFERENCES employee(id) ON DELETE CASCADE
+
 );
-
-SELECT employee.first_name, employee.last_name, role.title, role.salary, department.department_name, manager.first_name AS manager_first_name, manager.last_name AS manager_lastname FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON employee.manager_id = manager.id;
-
-SELECT role.title, role.salary, department.department_name FROM role LEFT JOIN department ON role.department_id = department.id

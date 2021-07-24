@@ -1,13 +1,8 @@
 const db = require("./db/connection");
-const express = require("express");
-const PORT = process.env.PORT || 3001;
-const app = express();
 const cTable = require("console.table");
 const mysql = require("mysql2");
 const { prompt } = require("inquirer");
 // const apiRoutes = require("./routes/apiRoutes");
-
-const inputCheck = require("./utils/inputCheck");
 // // middleware
 // app.use(express.urlencoded({ extended: false }));
 // app.use(express.json());
@@ -15,24 +10,31 @@ const inputCheck = require("./utils/inputCheck");
 // app.use("/api", apiRoutes);
 
 function menuQuestions() {
+  console.log(`
+  =============================
+  
+        EMPLOYEE TRACKER!!
+
+  =============================    
+  `)
   prompt([
     {
       type: "list",
       message: "What would you like to do??",
       name: "list",
       choices: [
-        "View ALL Departments",
+        "View All Departments",
         "View All Roles",
         "View All Employees",
         "Add Department",
         "Add Role",
-        "Add Employees",
+        "Add Employee",
         "Update Employee Role",
         "Quit",
       ],
     },
   ]).then((answers) => {
-    if (answers === "View All Departments") {
+    if (answers.list === "View All Departments") {
       viewAllDepartments();
     } else if (answers.list === "View All Roles") {
       viewAllRoles();
@@ -53,36 +55,54 @@ function menuQuestions() {
     } else if (answers.list === "Update Employee Role") {
       updateEmployeeRole();
     } else if (answers.list === "Quit") {
-      connection.end();
+      db.end();
     }
   });
 }
 
 function viewAllDepartments() {
-  db.query("SELECT * FROM department", function (err, res) {
+  console.log(`
+  =============================
+           DEPARTMENTS!!
+  =============================          
+  `)
+  const sql = `SELECT * FROM department`
+  db.query(sql, (err, rows) => {
     if (err) throw err;
-    console.table(res);
+    console.table(rows);
     menuQuestions();
   });
 }
 
 function viewAllRoles() {
+  console.log(`
+  =============================
+            ROLES!!
+  =============================
+  `)
+  const sql = `SELECT role.title, role.salary, department.name FROM role LEFT JOIN department ON role.department_id = department.id`
   db.query(
-    "SELECT role.title, role.salary, department.name FROM role LEFT JOIN depeartment ON role.department_id = department.id",
-    function (err, res) {
+    sql,
+    (err, rows) => {
       if (err) throw err;
-      console.table(res);
+      console.table(rows);
       menuQuestions();
     }
   );
 }
 
 function viewAllEmployees() {
+  console.log(`
+  ============================
+           EMPLOYEES!!
+  ============================        
+  `)
+  const sql = `SELECT employee.first_name, employee.last_name, role.title, role.salary, department.name, manager.first_name AS 'manager_firstname', manager.last_name AS 'manager_lastname' FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON employee.manager_id = manager.id;`
   db.query(
-    "SELECT employee.first_name, employee.last_name, role.title, role.salary, department.name, manager.first_name AS 'manager_firstname', manager.last_name AS 'manager_lastname' FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON employee.manager_id = manger.id;",
-    function (err, res) {
+    sql,
+    (err, rows) => {
       if (err) throw err;
-      console.table(res);
+      console.table(rows);
       menuQuestions();
     }
   );
@@ -91,7 +111,7 @@ function viewAllEmployees() {
 function addDepartment() {
   prompt([
     {
-      name: "department_name",
+      name: "name",
       type: "input",
       message: "What is the name of the department you'd like to add?",
     },
@@ -107,7 +127,7 @@ function addDepartment() {
 function addRole() {
   prompt([
     {
-      name: "role_name",
+      name: "title",
       type: "input",
       message: "What is the name of the role you'd like to add?",
     },
@@ -124,7 +144,11 @@ function addRole() {
   ]).then(function (answer) {
     db.query("INSERT INTO role SET ?", [answer], function (err) {
       if (err) throw err;
-      console.log("Success");
+      console.log(`
+      ==========================
+      ADDED ROLE SUCCESSFULLY!!
+      ==========================
+      `);
       menuQuestions();
     });
   });
@@ -155,83 +179,118 @@ function addEmployee() {
   ]).then(function (answer) {
     db.query("INSERT INTO employee SET ?", [answer], function (err) {
       if (err) throw err;
-      console.log("Success");
+      console.log(`
+      ==============================
+      ADDED EMPLOYEE SUCCESSFULLY!!
+      ==============================
+      `);
       menuQuestions();
     });
   });
 }
 
-function deleteDepartment() {
+function updateEmployeeRole() {
+  db.query("SELECT * FROM employee", (err, res) => {
+    const employees = res.map(updatedRole => {
+      return (
+        {
+          name: updatedRole.first_name + "" + updatedRole.last_name
+        }
+      )
+    })
+    db.query("SELECT * FROM employee", (err, res) =>{
+      const roles = res.map(updatedRole => {
+        return (
+          {
+            name: updatedRole.role_id,
+            value: updatedRole.id
+          }
+        )
+      })
   prompt([
     {
-      type: "number",
-      name: "id",
-      message: "Enter employee id to delete"
+      type: "list",
+      name: "employee",
+      message: "Which employee's role do you want to change",
+      choices: employees
+    },
+    {
+      type: "list",
+      name: "role",
+      messages: "What's the new role id you'd like to assign to the employee?",
+      choices: roles
     }
   ]).then(answers => {
-    db.query("DELETE FROM employee WHERE ?", {
-      id: answers.id
-    },
-    function(err, res) {
+    db.query("UPDATE employee SET role_id = ? WHERE id =?",
+    [answers.employee, answers.role],
+    function (err, res) {
       if (err) throw err;
-        console.log(res.affectedRows + "Deleted employee!\n");
-        menuQuestions();
-    })
-  })
+      console.log(res.affectedRows + "Employee updated!");
+      menuQuestions();
+    });
+    });
+  });
+})
 }
 
 
-function deleteRole() {
-  prompt([
-    {
-      type: "number",
-      name: "id",
-      message: "Enter role id to delete"
-    }
-  ]).then(answers => {
-    db.query("DELETE FROM role WHERE ?", {
-      id: answers.id
-    },
-    function(err, res) {
-      if (err) throw err;
-        console.log(res.affectedRows + "Deleted role!\n");
-        menuQuestions();
-    })
-  })
-}
+// function deleteDepartment() {
+//   prompt([
+//     {
+//       type: "number",
+//       name: "id",
+//       message: "Enter employee id to delete"
+//     }
+//   ]).then(answers => {
+//     db.query("DELETE FROM employee WHERE ?", {
+//       id: answers.id
+//     },
+//     function(err, res) {
+//       if (err) throw err;
+//         console.log(res.affectedRows + "Deleted employee!\n");
+//         menuQuestions();
+//     })
+//   })
+// }
 
 
-function deleteEmployee() {
-  prompt([
-    {
-      type: "number",
-      name: "id",
-      message: "Enter employee id to delete"
-    }
-  ]).then(answers => {
-    db.query("DELETE FROM employee WHERE ?", {
-      id: answers.id
-    },
-    function(err, res) {
-      if (err) throw err;
-        console.log(res.affectedRows + "Deleted employee!\n");
-        menuQuestions();
-    })
-  })
-}
+// function deleteRole() {
+//   prompt([
+//     {
+//       type: "number",
+//       name: "id",
+//       message: "Enter role id to delete"
+//     }
+//   ]).then(answers => {
+//     db.query("DELETE FROM role WHERE ?", {
+//       id: answers.id
+//     },
+//     function(err, res) {
+//       if (err) throw err;
+//         console.log(res.affectedRows + "Deleted role!\n");
+//         menuQuestions();
+//     })
+//   })
+// }
+
+
+// function deleteEmployee() {
+//   prompt([
+//     {
+//       type: "number",
+//       name: "id",
+//       message: "Enter employee id to delete"
+//     }
+//   ]).then(answers => {
+//     db.query("DELETE FROM employee WHERE ?", {
+//       id: answers.id
+//     },
+//     function(err, res) {
+//       if (err) throw err;
+//         console.log(res.affectedRows + "Deleted employee!\n");
+//         menuQuestions();
+//     })
+//   })
+// }
 
 menuQuestions();
-
-// default response for any other request not found (Not Found)
-app.use((req, res) => {
-  res.status(404).end();
-});
-
-// Start server after DB connection
-db.connect((err) => {
-  if (err) throw err;
-  console.log("Database connected.");
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-});

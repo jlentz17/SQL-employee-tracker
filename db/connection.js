@@ -9,6 +9,8 @@ const db = mysql.createConnection({
   password: "password",
   database: "employee",
 });
-db.connect();
+db.connect(function(err) {
+  if (err) throw err
+}) 
 
 module.exports = db;
