@@ -46,6 +46,12 @@ function menuQuestions() {
       addEmployee();
     } else if (answers.list === "Update Employee Role") {
       updateEmployeeRole();
+    } else if (answers.list === "Update Employee Role") {
+      deleteDepartment();
+    } else if (answers.list === "Update Employee Role") {
+      updateEmployeeRole();
+    } else if (answers.list === "Update Employee Role") {
+      updateEmployeeRole();
     } else if (answers.list === "Quit") {
       connection.end();
     }
@@ -213,6 +219,8 @@ function deleteEmployee() {
     })
   })
 }
+
+menuQuestions();
 
 // default response for any other request not found (Not Found)
 app.use((req, res) => {
