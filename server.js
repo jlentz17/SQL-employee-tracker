@@ -121,7 +121,11 @@ function addDepartment() {
   ]).then(function (answer) {
     db.query("INSERT INTO department SET ?", [answer], function (err) {
       if (err) throw err;
-      console.log("Success");
+      console.log(`
+      =============================
+           DEPARTMENT ADDED!!
+      ============================= 
+      `);
       menuQuestions();
     });
   });
@@ -197,7 +201,8 @@ function updateEmployeeRole() {
     const employees = res.map(updatedRole => {
       return (
         {
-          name: updatedRole.first_name + "" + updatedRole.last_name
+          name: updatedRole.first_name + "" + updatedRole.last_name,
+          value: updatedRole.id
         }
       )
     })
@@ -250,7 +255,10 @@ function deleteDepartment() {
     },
     function(err, res) {
       if (err) throw err;
-        console.log(res.affectedRows + "Deleted department!");
+        console.log(`
+        ==========================
+            DEPARTMENT DELETED!!
+        ==========================`);
         menuQuestions();
     })
   })
@@ -270,7 +278,10 @@ function deleteRole() {
     },
     function(err, res) {
       if (err) throw err;
-        console.log(res.affectedRows + "Deleted role!");
+        console.log(`
+        ==========================
+               ROLE DELETED!!
+        ==========================`);
         menuQuestions();
     })
   })
@@ -292,7 +303,7 @@ function deleteEmployee() {
       if (err) throw err;
         console.log(`
         ============================
-        SUCCESSFULLY DELETED EMPLOYEE
+             EMPLOYEE DELETED
         ============================`);
         menuQuestions();
     })

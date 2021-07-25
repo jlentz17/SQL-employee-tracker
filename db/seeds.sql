@@ -2,25 +2,25 @@ USE employee;
 
 INSERT INTO department (name)
 VALUES
-("Sales"),
-("Engineering"),
-("Finance"),
-("Legal");
+("Stamford"),
+("Corporate"),
+("Nashua"),
+("Scranton");
 
 INSERT INTO role (title, salary, department_id)
 VALUES
-("Manager", "50000", 2),
-("Software Lead", 75000, 2),
-("Project Manager", 100000, 2),
-("Accountant", 48000, 3),
-("Legal Team Lead", 76000, 4);
+("Manager", 100000, 1),
+("Sales", 75000, 2),
+("Warehouse", 120000, 3),
+("Accountant", 69000, 4),
+("Receptionist", 57000, 5);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES 
-("Michael", "Scott", 2, NULL),
-("Jan", "Levinson-Gould", 2, NULL),
-("Pam", "Beasley", 2, NULL),
-("Andy", "Bernard", 3, NULL);
+("Michael", "Scott", 1, NULL),
+("Jan", "Levinson-Gould", 3, NULL),
+("Pam", "Beasley", 5, NULL),
+("Andy", "Bernard", 2, NULL);
 
 -- INSERT INTO department (name) VALUES (?);
 
