@@ -201,20 +201,21 @@ function updateEmployeeRole() {
     const employees = res.map(updatedRole => {
       return (
         {
-          name: updatedRole.first_name + "" + updatedRole.last_name,
+          name: updatedRole.first_name + " " + updatedRole.last_name,
           value: updatedRole.id
         }
       )
     })
-    db.query("SELECT * FROM employee", (err, res) =>{
+    db.query("SELECT * FROM role", (err, res) => {
       const roles = res.map(updatedRole => {
         return (
           {
-            name: updatedRole.role_id,
+            name: updatedRole.title,
             value: updatedRole.id
           }
         )
       })
+      console.log(roles)
   prompt([
     {
       type: "list",
@@ -229,11 +230,13 @@ function updateEmployeeRole() {
       choices: roles
     }
   ]).then(answers => {
-    db.query("UPDATE employee SET role_id = ? WHERE id =?",
-    [answers.employee, answers.role],
+    db.query(`UPDATE employee SET role_id = '${answers.role}' WHERE id = '${answers.employee}'`,
     function (err, res) {
       if (err) throw err;
-      console.log(res.affectedRows + "Employee updated!");
+      console.log(`
+      ========================
+        EMPLOYEE ROLE UPDATED
+      ========================`, res);
       menuQuestions();
     });
     });
