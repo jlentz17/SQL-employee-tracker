@@ -30,7 +30,10 @@ function menuQuestions() {
         "Add Role",
         "Add Employee",
         "Update Employee Role",
-        "Quit",
+        "Delete Department",
+        "Delete Role",
+        "Delete Employee",
+        "Quit"
       ],
     },
   ]).then((answers) => {
@@ -48,12 +51,12 @@ function menuQuestions() {
       addEmployee();
     } else if (answers.list === "Update Employee Role") {
       updateEmployeeRole();
-    } else if (answers.list === "Update Employee Role") {
+    } else if (answers.list === "Delete Department") {
       deleteDepartment();
-    } else if (answers.list === "Update Employee Role") {
-      updateEmployeeRole();
-    } else if (answers.list === "Update Employee Role") {
-      updateEmployeeRole();
+    } else if (answers.list === "Delete Role") {
+      deleteRole();
+    } else if (answers.list === "Delete Employee") {
+      deleteEmployee();
     } else if (answers.list === "Quit") {
       db.end();
     }
@@ -234,63 +237,66 @@ function updateEmployeeRole() {
 }
 
 
-// function deleteDepartment() {
-//   prompt([
-//     {
-//       type: "number",
-//       name: "id",
-//       message: "Enter employee id to delete"
-//     }
-//   ]).then(answers => {
-//     db.query("DELETE FROM employee WHERE ?", {
-//       id: answers.id
-//     },
-//     function(err, res) {
-//       if (err) throw err;
-//         console.log(res.affectedRows + "Deleted employee!\n");
-//         menuQuestions();
-//     })
-//   })
-// }
+function deleteDepartment() {
+  prompt([
+    {
+      type: "number",
+      name: "id",
+      message: "Enter department id to delete"
+    }
+  ]).then(answers => {
+    db.query("DELETE FROM department WHERE ?", {
+      id: answers.id
+    },
+    function(err, res) {
+      if (err) throw err;
+        console.log(res.affectedRows + "Deleted department!");
+        menuQuestions();
+    })
+  })
+}
 
 
-// function deleteRole() {
-//   prompt([
-//     {
-//       type: "number",
-//       name: "id",
-//       message: "Enter role id to delete"
-//     }
-//   ]).then(answers => {
-//     db.query("DELETE FROM role WHERE ?", {
-//       id: answers.id
-//     },
-//     function(err, res) {
-//       if (err) throw err;
-//         console.log(res.affectedRows + "Deleted role!\n");
-//         menuQuestions();
-//     })
-//   })
-// }
+function deleteRole() {
+  prompt([
+    {
+      type: "number",
+      name: "id",
+      message: "Enter role id to delete"
+    }
+  ]).then(answers => {
+    db.query("DELETE FROM role WHERE ?", {
+      id: answers.id
+    },
+    function(err, res) {
+      if (err) throw err;
+        console.log(res.affectedRows + "Deleted role!");
+        menuQuestions();
+    })
+  })
+}
 
 
-// function deleteEmployee() {
-//   prompt([
-//     {
-//       type: "number",
-//       name: "id",
-//       message: "Enter employee id to delete"
-//     }
-//   ]).then(answers => {
-//     db.query("DELETE FROM employee WHERE ?", {
-//       id: answers.id
-//     },
-//     function(err, res) {
-//       if (err) throw err;
-//         console.log(res.affectedRows + "Deleted employee!\n");
-//         menuQuestions();
-//     })
-//   })
-// }
+function deleteEmployee() {
+  prompt([
+    {
+      type: "number",
+      name: "id",
+      message: "Enter employee id to delete"
+    }
+  ]).then(answers => {
+    db.query("DELETE FROM employee WHERE ?", {
+      id: answers.id
+    },
+    function(err, res) {
+      if (err) throw err;
+        console.log(`
+        ============================
+        SUCCESSFULLY DELETED EMPLOYEE
+        ============================`);
+        menuQuestions();
+    })
+  })
+}
 
 menuQuestions();

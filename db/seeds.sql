@@ -17,10 +17,10 @@ VALUES
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES 
-("Lars", "Finklestein", 2, NULL),
-("Penelope", "Tate", 2, NULL),
-("Rebecca", "Donaldson", 2, NULL),
-("Frank", "Reynolds", 3, NULL);
+("Michael", "Scott", 2, NULL),
+("Jan", "Levinson-Gould", 2, NULL),
+("Pam", "Beasley", 2, NULL),
+("Andy", "Bernard", 3, NULL);
 
 -- INSERT INTO department (name) VALUES (?);
 
