@@ -1,7 +1,7 @@
 # SQL Emloyee Tracker
 
 [GitHub Repo](https://github.com/jlentz17/SQL-employee-tracker)  
-[Video Walkthrough](https://youtu.be/Hxp1zZEKxK8)
+[Video Walkthrough](https://www.youtube.com/watch?v=enRjDyed-NA)
 
 ## Description
 
