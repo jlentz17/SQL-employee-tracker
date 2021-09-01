@@ -1,17 +1,20 @@
 
--- DROP TABLE IF EXISTS department;
--- DROP TABLE IF EXISTS role;
--- DROP TABLE IF EXISTS employee;
-
+-- DROP TABLE IF EXISTS 
 DROP DATABASE IF EXISTS employee;
+
+-- Create database --
 CREATE DATABASE employee;
+
+-- start using database
 USE employee;
 
+-- Create table "department" 
 CREATE TABLE department(
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(30) NOT NULL
 );
 
+-- Create table "role" 
 CREATE TABLE role(
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(30) NOT NULL,
@@ -21,6 +24,7 @@ CREATE TABLE role(
     REFERENCES department(id) ON DELETE CASCADE
 );
 
+-- Create table "role" 
 CREATE TABLE employee(
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(30) NOT NULL,
